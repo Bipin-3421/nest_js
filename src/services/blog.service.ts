@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class BlogService {
-  getHello(): string {
-    return 'A new Blog From NestJs!';
+  getAllBlogs(): string[] {
+    return ['BlogPost1', 'BlogPost2', 'BlogPost3'];
   }
 }
