@@ -1,4 +1,13 @@
-import { Controller, Get, Patch, Post, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Patch,
+  Post,
+  Delete,
+  HttpCode,
+  Body,
+} from '@nestjs/common';
+import { CreateBlogDto } from 'src/dto/create-blog.dto';
 import { BlogService } from 'src/services/blog.service';
 
 @Controller()
@@ -11,7 +20,11 @@ export class BlogController {
   }
 
   @Post()
-  createBlog() {}
+  @HttpCode(201)
+  createBlog(@Body() createBlogDto: CreateBlogDto) {
+    const blog = this.appService.addBlog(createBlogDto);
+    return { message: 'Blog created successfully', success: true, blog };
+  }
 
   @Patch()
   editBlog() {}
