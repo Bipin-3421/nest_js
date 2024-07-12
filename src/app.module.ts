@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { BlogModule } from './modules/blog.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appSetting } from './config/appSetting';
+import { BlogPost } from './entities/blog-post.entity';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { appSetting } from './config/appSetting';
       username: 'postgres',
       password: appSetting.password,
       database: 'blog',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [BlogPost],
       synchronize: true,
     }),
     BlogModule,
