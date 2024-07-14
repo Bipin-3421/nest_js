@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBlogDto } from 'src/dto/create-blog.dto';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BlogPost } from 'src/entities/blog-post.entity';
 import { UpdateBlogDto } from 'src/dto/update-blog.dto';
@@ -19,7 +19,7 @@ export class BlogService {
 
   async addBlog(createBlogDto: CreateBlogDto): Promise<BlogPost> {
     const { title, overview, description } = createBlogDto;
-    const newBlog = await this.blogPostRepository.create({
+    const newBlog = this.blogPostRepository.create({
       title,
       overview,
       description,
@@ -43,5 +43,11 @@ export class BlogService {
     return this.blogPostRepository.save(updatedBlog);
   }
 
-  async deleteBlog() {}
+  async deleteBlog(id: number): Promise<DeleteResult> {
+    const deletedBlog = await this.blogPostRepository.delete(id);
+    if (deletedBlog.affected === 0) {
+      throw new NotFoundException('No blog found');
+    }
+    return deletedBlog;
+  }
 }

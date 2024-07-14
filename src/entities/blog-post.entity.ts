@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class BlogPost {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
@@ -13,4 +13,7 @@ export class BlogPost {
 
   @Column()
   description: string;
+
+  @Column()
+  image: string;
 }
