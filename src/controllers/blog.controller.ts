@@ -29,27 +29,30 @@ export class BlogController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('image'))
   @HttpCode(201)
-  async createBlog(@Body() createBlogDto: CreateBlogDto) {
-    const addBlog = await this.appService.addBlog(createBlogDto);
+  async createBlog(
+    @Body() createBlogDto: CreateBlogDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    const addBlog = await this.appService.addBlog(createBlogDto, image);
     return { message: 'Blog created successfully', success: true, addBlog };
   }
 
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  async fileUpload(
-    @Body() body: ImageBlogDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    // return console.log(file);
-    return {
-      originalname: file.originalname,
-      filename: file.filename,
-      size: file.size,
-      mimetype: file.mimetype,
-    };
-  }
+  // @Post('upload')
+  // @UseInterceptors(FileInterceptor('file'))
+  // async fileUpload(
+  //   @Body() body: ImageBlogDto,
+  //   @UploadedFile() file: Express.Multer.File,
+  // ) {
+  //   // return console.log(file);
+  //   return {
+  //     originalname: file.originalname,
+  //     filename: file.filename,
+  //     size: file.size,
+  //     mimetype: file.mimetype,
+  //   };
+  // }
 
   @Patch(':id')
   async editBlog(

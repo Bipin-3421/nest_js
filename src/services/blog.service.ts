@@ -17,12 +17,16 @@ export class BlogService {
     return allBlogs;
   }
 
-  async addBlog(createBlogDto: CreateBlogDto): Promise<BlogPost> {
+  async addBlog(
+    createBlogDto: CreateBlogDto,
+    image: Express.Multer.File,
+  ): Promise<BlogPost> {
     const { title, overview, description } = createBlogDto;
     const newBlog = this.blogPostRepository.create({
       title,
       overview,
       description,
+      image: image.path,
     });
     return this.blogPostRepository.save(newBlog);
   }
