@@ -17,7 +17,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateBlogDto } from 'src/dto/blog/create-blog.dto';
 import { UpdateBlogDto } from 'src/dto/blog/update-blog.dto';
 
-@Controller()
+@Controller('api/blog')
 export class BlogController {
   constructor(private readonly appService: BlogService) {}
 
@@ -34,24 +34,15 @@ export class BlogController {
     @Body() createBlogDto: CreateBlogDto,
     @UploadedFile() image: Express.Multer.File,
   ) {
-    const addBlog = await this.appService.addBlog(createBlogDto, image);
+    const { title, overview, description } = createBlogDto;
+    const addBlog = await this.appService.addBlog(
+      title,
+      overview,
+      description,
+      image,
+    );
     return { message: 'Blog created successfully', success: true, addBlog };
   }
-
-  // @Post('upload')
-  // @UseInterceptors(FileInterceptor('file'))
-  // async fileUpload(
-  //   @Body() body: ImageBlogDto,
-  //   @UploadedFile() file: Express.Multer.File,
-  // ) {
-  //   // return console.log(file);
-  //   return {
-  //     originalname: file.originalname,
-  //     filename: file.filename,
-  //     size: file.size,
-  //     mimetype: file.mimetype,
-  //   };
-  // }
 
   @Patch(':id')
   async editBlog(

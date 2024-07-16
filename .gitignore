@@ -2,9 +2,8 @@
 /dist
 /node_modules
 /build
-/uploads
 /RecallConcept.ts
-
+uploads
 # Logs
 logs
 *.log

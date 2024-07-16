@@ -10,6 +10,8 @@ import { appSetting } from './config/appSetting';
 import { BlogPost } from './entities/blog/blog-post.entity';
 import { authMiddleware } from './middlewares/auth/auth.middleware';
 import { BlogController } from './controllers/blog.controller';
+import { AuthModule } from './modules/user/user.module';
+import { User } from './entities/user/user.entity';
 
 @Module({
   imports: [
@@ -20,10 +22,11 @@ import { BlogController } from './controllers/blog.controller';
       username: 'postgres',
       password: appSetting.password,
       database: 'blog',
-      entities: [BlogPost],
+      entities: [BlogPost, User],
       synchronize: true,
     }),
     BlogModule,
+    AuthModule,
   ],
 })
 export class AppModule implements NestModule {

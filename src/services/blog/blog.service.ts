@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateBlogDto } from 'src/dto/blog/create-blog.dto';
 import { UpdateBlogDto } from 'src/dto/blog/update-blog.dto';
 import { BlogPost } from 'src/entities/blog/blog-post.entity';
 
@@ -18,10 +17,11 @@ export class BlogService {
   }
 
   async addBlog(
-    createBlogDto: CreateBlogDto,
+    title: string,
+    overview: string,
+    description: string,
     image: Express.Multer.File,
   ): Promise<BlogPost> {
-    const { title, overview, description } = createBlogDto;
     const newBlog = this.blogPostRepository.create({
       title,
       overview,
