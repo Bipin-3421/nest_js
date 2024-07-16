@@ -4,11 +4,11 @@ import {
   RequestMethod,
   MiddlewareConsumer,
 } from '@nestjs/common';
-import { BlogModule } from './modules/blog.module';
+import { BlogModule } from './modules/blog/blog.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appSetting } from './config/appSetting';
-import { BlogPost } from './entities/blog-post.entity';
-import { authMiddleware } from './middlewares/auth.middleware';
+import { BlogPost } from './entities/blog/blog-post.entity';
+import { authMiddleware } from './middlewares/auth/auth.middleware';
 import { BlogController } from './controllers/blog.controller';
 
 @Module({

@@ -12,11 +12,10 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { CreateBlogDto } from 'src/dto/create-blog.dto';
-import { BlogService } from 'src/services/blog.service';
-import { UpdateBlogDto } from 'src/dto/update-blog.dto';
-import { ImageBlogDto } from 'src/dto/image-blog.dto';
+import { BlogService } from 'src/services/blog/blog.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateBlogDto } from 'src/dto/blog/create-blog.dto';
+import { UpdateBlogDto } from 'src/dto/blog/update-blog.dto';
 
 @Controller()
 export class BlogController {
