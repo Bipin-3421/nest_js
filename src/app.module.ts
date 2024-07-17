@@ -3,9 +3,7 @@ import { BlogModule } from './modules/blog/blog.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appSetting } from './config/appSetting';
 import { BlogPost } from './entities/blog/blog-post.entity';
-import { authMiddleware } from './middlewares/auth/auth.middleware';
-import { BlogController } from './controllers/blog.controller';
-import { AuthModule } from './modules/user/user.module';
+import { UserModule } from './modules/user/user.module';
 import { User } from './entities/user/user.entity';
 
 @Module({
@@ -21,11 +19,7 @@ import { User } from './entities/user/user.entity';
       synchronize: true,
     }),
     BlogModule,
-    AuthModule,
+    UserModule,
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(authMiddleware).forRoutes(BlogController);
-  }
-}
+export class AppModule {}
