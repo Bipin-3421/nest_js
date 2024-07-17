@@ -3,11 +3,14 @@ import { DeleteResult, Repository } from 'typeorm';
 import { CreateUserDto } from 'src/dto/user/user.dto';
 import { LoginUserDto } from 'src/dto/user/userLogin.dto';
 import { UserService } from 'src/services/user/user.servive';
-import { AuthService } from 'src/auth/auth.service';
+import { GenerateToken } from 'src/utils/jwt.helper';
 
 @Controller('auth/user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly generateToken: GenerateToken,
+  ) {}
 
   @Get()
   async getAllUsers() {
@@ -37,10 +40,11 @@ export class UserController {
   async loginUser(@Body() loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
     const user = await this.userService.login(email, password);
+    const accessToken = await this.generateToken.signIn(user.id, user.name);
     return {
       success: true,
       message: `user with email:${email} logged in successfully`,
-      user,
+      accessToken,
     };
   }
 }
