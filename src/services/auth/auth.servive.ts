@@ -23,4 +23,25 @@ export class AuthService {
     });
     return this.userRepository.save(newUser);
   }
+
+  async getAllUsers(): Promise<User[]> {
+    const allUsers = await this.userRepository.find();
+    return allUsers;
+  }
+
+  async login(email: string, password: string): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: {
+        email: email,
+      },
+      select: {
+        email: true,
+        password: true,
+      },
+    });
+    if (!user) throw new NotFoundException('user not found');
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) throw new NotFoundException('password not matched');
+    return user;
+  }
 }

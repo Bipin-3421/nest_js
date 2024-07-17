@@ -1,9 +1,4 @@
-import {
-  Module,
-  NestModule,
-  RequestMethod,
-  MiddlewareConsumer,
-} from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { BlogModule } from './modules/blog/blog.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appSetting } from './config/appSetting';
@@ -22,7 +17,7 @@ import { User } from './entities/user/user.entity';
       username: 'postgres',
       password: appSetting.password,
       database: 'blog',
-      entities: [BlogPost, User],
+      entities: [User, BlogPost],
       synchronize: true,
     }),
     BlogModule,
