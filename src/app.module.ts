@@ -5,6 +5,7 @@ import { appSetting } from './config/appSetting';
 import { BlogPost } from './entities/blog/blog-post.entity';
 import { UserModule } from './modules/user/user.module';
 import { User } from './entities/user/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [

@@ -3,6 +3,7 @@ import { DeleteResult, Repository } from 'typeorm';
 import { CreateUserDto } from 'src/dto/user/user.dto';
 import { LoginUserDto } from 'src/dto/user/userLogin.dto';
 import { UserService } from 'src/services/user/user.servive';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('auth/user')
 export class UserController {
