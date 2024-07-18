@@ -13,6 +13,9 @@ export class BlogService {
 
   async getAllBlogs(): Promise<BlogPost[]> {
     const allBlogs = await this.blogPostRepository.find();
+    if (allBlogs.length === 0) {
+      throw new NotFoundException('no blog found');
+    }
     return allBlogs;
   }
 
@@ -21,12 +24,16 @@ export class BlogService {
     overview: string,
     description: string,
     image: Express.Multer.File,
+    userId: string,
   ): Promise<BlogPost> {
+    console.log(userId);
+
     const newBlog = this.blogPostRepository.create({
       title,
       overview,
       description,
       image: image.path,
+      userId,
     });
     return this.blogPostRepository.save(newBlog);
   }
@@ -38,7 +45,7 @@ export class BlogService {
       },
     });
     if (!updateBlog) {
-      throw new NotFoundException('No blog found');
+      throw new NotFoundException('no blog found');
     }
     const updatedBlog = {
       ...updateBlog,

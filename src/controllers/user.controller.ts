@@ -1,9 +1,10 @@
-import { NotFoundException, Post, Body, Controller, Get } from '@nestjs/common';
-import { DeleteResult, Repository } from 'typeorm';
+import { Post, Body, Controller, Get, UseGuards, Req } from '@nestjs/common';
 import { CreateUserDto } from 'src/dto/user/user.dto';
 import { LoginUserDto } from 'src/dto/user/userLogin.dto';
 import { UserService } from 'src/services/user/user.servive';
 import { GenerateToken } from 'src/utils/jwt.helper';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { Request } from 'express';
 
 @Controller('auth/user')
 export class UserController {
@@ -12,8 +13,9 @@ export class UserController {
     private readonly generateToken: GenerateToken,
   ) {}
 
+  @UseGuards(AuthGuard)
   @Get()
-  async getAllUsers() {
+  async getAllUsers(@Req() request: Request) {
     const users = await this.userService.getAllUsers();
     return {
       success: true,
@@ -41,6 +43,7 @@ export class UserController {
     const { email, password } = loginUserDto;
     const user = await this.userService.login(email, password);
     const accessToken = await this.generateToken.signIn(user.id, user.name);
+    console.log({ accessToken });
     return {
       success: true,
       message: `user with email:${email} logged in successfully`,

@@ -32,9 +32,9 @@ export class BlogPost {
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.blogs, { nullable: false })
-  // @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'userId' })
   user: User;
 
-  // @Column({ type: String })
-  // userId: string;
+  @Column({ type: String })
+  userId: string;
 }

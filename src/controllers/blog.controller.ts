@@ -11,11 +11,15 @@ import {
   ParseIntPipe,
   UploadedFile,
   UseInterceptors,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { BlogService } from 'src/services/blog/blog.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateBlogDto } from 'src/dto/blog/create-blog.dto';
 import { UpdateBlogDto } from 'src/dto/blog/update-blog.dto';
+import { Request } from 'express';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('api/blog')
 export class BlogController {
@@ -28,18 +32,22 @@ export class BlogController {
   }
 
   @Post()
+  @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   @HttpCode(201)
   async createBlog(
     @Body() createBlogDto: CreateBlogDto,
     @UploadedFile() image: Express.Multer.File,
+    @Req() req: Request,
   ) {
     const { title, overview, description } = createBlogDto;
+    const userId = req.user;
     const addBlog = await this.appService.addBlog(
       title,
       overview,
       description,
       image,
+      userId.sub,
     );
     return { message: 'Blog created successfully', success: true, addBlog };
   }
@@ -60,7 +68,6 @@ export class BlogController {
   @Delete(':id')
   async deleteBlog(@Param('id', ParseIntPipe) id: number) {
     const deleteBlog = await this.appService.deleteBlog(id);
-    console.log(deleteBlog);
     return { success: true, deleteBlog };
   }
 }
