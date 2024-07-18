@@ -26,8 +26,6 @@ export class BlogService {
     image: Express.Multer.File,
     userId: string,
   ): Promise<BlogPost> {
-    console.log(userId);
-
     const newBlog = this.blogPostRepository.create({
       title,
       overview,

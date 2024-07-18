@@ -43,7 +43,6 @@ export class UserController {
     const { email, password } = loginUserDto;
     const user = await this.userService.login(email, password);
     const accessToken = await this.generateToken.signIn(user.id, user.name);
-    console.log({ accessToken });
     return {
       success: true,
       message: `user with email:${email} logged in successfully`,
