@@ -3,7 +3,7 @@
 /node_modules
 /build
 /RecallConcept.ts
-uploads
+/uploads
 # Logs
 logs
 *.log

@@ -1,5 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Unique,
+  OneToMany,
+} from 'typeorm';
 import { UserRole } from 'src/types/enum/enum.type';
+import { BlogPost } from '../blog/blog-post.entity';
 
 @Entity('users')
 @Unique(['email'])
@@ -22,4 +29,7 @@ export class User {
     default: UserRole.USER,
   })
   role: UserRole;
+
+  @OneToMany(() => BlogPost, (blog) => blog.user)
+  blogs: BlogPost[];
 }
