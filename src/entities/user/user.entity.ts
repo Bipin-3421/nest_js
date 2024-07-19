@@ -7,13 +7,14 @@ import {
 } from 'typeorm';
 import { UserRole } from 'src/types/enum/enum.type';
 import { BlogPost } from '../blog/blog-post.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('users')
 @Unique(['email'])
 export class User {
   @PrimaryGeneratedColumn('uuid', { name: 'ID' })
   id: string;
-
+  @ApiProperty({ example: 1, description: 'The age of the Cat' })
   @Column({ name: 'FullName' })
   name: string;
 
