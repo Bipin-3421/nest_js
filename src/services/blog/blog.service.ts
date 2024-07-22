@@ -3,6 +3,7 @@ import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateBlogDto } from 'src/dto/blog/update-blog.dto';
 import { BlogPost } from 'src/entities/blog/blog-post.entity';
+import { Between } from 'typeorm';
 
 @Injectable()
 export class BlogService {
@@ -11,12 +12,30 @@ export class BlogService {
     private blogPostRepository: Repository<BlogPost>,
   ) {}
 
-  async getAllBlogs(): Promise<BlogPost[]> {
-    const allBlogs = await this.blogPostRepository.find();
-    if (allBlogs.length === 0) {
+  async filter(startDate: string, endDate: string): Promise<BlogPost[]> {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    if (start > end) {
+      throw new Error('End date must be after start date');
+    }
+
+    start.setHours(0, 0, 0);
+    end.setHours(23, 59, 59);
+
+    return this.blogPostRepository.find({
+      where: {
+        createdAt: Between(start, end),
+      },
+      order: { createdAt: 'ASC' },
+    });
+  }
+
+  async getAllBlog(): Promise<BlogPost[]> {
+    const allBlog = await this.blogPostRepository.find();
+    if (allBlog.length === 0) {
       throw new NotFoundException('no blog found');
     }
-    return allBlogs;
+    return allBlog;
   }
 
   async addBlog(

@@ -5,7 +5,9 @@ import { UserService } from 'src/services/user/user.servive';
 import { GenerateToken } from 'src/utils/jwt.helper';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @Controller('auth/user')
 export class UserController {
   constructor(
