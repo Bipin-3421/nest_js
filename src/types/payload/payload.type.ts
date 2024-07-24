@@ -1,4 +1,4 @@
-export type payloadType = {
+export type PayloadType = {
   sub: string;
   name: string;
 };

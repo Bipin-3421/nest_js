@@ -4,7 +4,6 @@ import {
   Patch,
   Post,
   Delete,
-  HttpCode,
   HttpStatus,
   Body,
   Param,
@@ -14,14 +13,16 @@ import {
   Req,
   UseGuards,
   Query,
+  NotFoundException,
+  Res,
 } from '@nestjs/common';
 import { BlogService } from 'src/services/blog/blog.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateBlogDto } from 'src/dto/blog/create-blog.dto';
+import { CreateBlogDto, ResponseBlogDto } from 'src/dto/blog/create-blog.dto';
 import { UpdateBlogDto } from 'src/dto/blog/update-blog.dto';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiConsumes } from '@nestjs/swagger';
 
 @ApiTags('Blog')
 @UseGuards(AuthGuard)
@@ -31,9 +32,14 @@ export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
   @Get()
-  async getAllBlog() {
+  async getAllBlog(@Res() res: Response) {
     const blog = await this.blogService.getAllBlog();
-    return { success: true, blog };
+    return res.status(200).json({
+      success: true,
+      contentType: 'application/json',
+      message: 'Blogs fetched properly',
+      blog,
+    });
   }
 
   @Get('/filter')
@@ -48,22 +54,24 @@ export class BlogController {
   @Post()
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('image'))
-  @HttpCode(201)
+  @ApiConsumes('multipart/form-data')
   async createBlog(
-    @Body() createBlogDto: CreateBlogDto,
+    @Body() body: CreateBlogDto,
     @UploadedFile() image: Express.Multer.File,
     @Req() req: Request,
-  ) {
-    const { title, overview, description } = createBlogDto;
+  ): Promise<ResponseBlogDto> {
+    if (image) {
+      body.image = image;
+    }
     const userId = req.user;
-    const addBlog = await this.blogService.addBlog(
-      title,
-      overview,
-      description,
-      image,
-      userId.sub,
-    );
-    return { message: 'Blog created successfully', success: true, addBlog };
+    if (!userId) throw new NotFoundException('user not found');
+    const blog = await this.blogService.addBlog(body, userId.sub);
+    const data = blog;
+    return {
+      message: 'Blog created successfully',
+      success: true,
+      data,
+    };
   }
 
   @Patch(':id')

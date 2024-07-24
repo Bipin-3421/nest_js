@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateBlogDto } from 'src/dto/blog/update-blog.dto';
+import { CreateBlogDto } from 'src/dto/blog/create-blog.dto';
 import { BlogPost } from 'src/entities/blog/blog-post.entity';
 import { Between } from 'typeorm';
 
@@ -38,37 +39,33 @@ export class BlogService {
     return allBlog;
   }
 
-  async addBlog(
-    title: string,
-    overview: string,
-    description: string,
-    image: Express.Multer.File,
-    userId: string,
-  ): Promise<BlogPost> {
+  async addBlog(data: CreateBlogDto, userId: string): Promise<BlogPost> {
     const newBlog = this.blogPostRepository.create({
-      title,
-      overview,
-      description,
-      image: image.path,
+      title: data.title,
+      overview: data.overview,
+      description: data.description,
+      image: data.image.path,
       userId,
     });
+
     return this.blogPostRepository.save(newBlog);
   }
 
-  async editBlog(id: number, updateBlogDto: UpdateBlogDto): Promise<BlogPost> {
-    const updateBlog = await this.blogPostRepository.findOne({
+  async editBlog(id: number, data: UpdateBlogDto): Promise<BlogPost> {
+    const existingBlog = await this.blogPostRepository.findOne({
       where: {
         id: id,
       },
     });
-    if (!updateBlog) {
+    if (!existingBlog) {
       throw new NotFoundException('no blog found');
     }
-    const updatedBlog = {
-      ...updateBlog,
-      ...updateBlogDto,
-    };
-    return this.blogPostRepository.save(updatedBlog);
+
+    if (data.title) existingBlog.title = data.title;
+    if (data.description) existingBlog.description = data.description;
+    if (data.overview) existingBlog.overview = data.overview;
+
+    return this.blogPostRepository.save(existingBlog);
   }
 
   async deleteBlog(id: number): Promise<DeleteResult> {

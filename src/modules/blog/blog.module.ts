@@ -8,10 +8,8 @@ import { BlogPost } from 'src/entities/blog/blog-post.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([BlogPost]),
-    MulterModule.registerAsync({
-      useFactory: () => ({
-        dest: './uploads',
-      }),
+    MulterModule.register({
+      dest: './uploads',
     }),
   ],
   controllers: [BlogController],

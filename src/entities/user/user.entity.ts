@@ -4,17 +4,24 @@ import {
   Column,
   Unique,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from 'src/types/enum/enum.type';
 import { BlogPost } from '../blog/blog-post.entity';
-import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('users')
 @Unique(['email'])
 export class User {
   @PrimaryGeneratedColumn('uuid', { name: 'ID' })
   id: string;
-  @ApiProperty({ example: 1, description: 'The age of the Cat' })
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
   @Column({ name: 'FullName' })
   name: string;
 

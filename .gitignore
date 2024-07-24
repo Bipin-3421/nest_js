@@ -4,6 +4,8 @@
 /build
 /RecallConcept.ts
 /uploads
+/hints.txt
+token
 # Logs
 logs
 *.log
