@@ -11,7 +11,6 @@ import {
   UploadedFile,
   UseInterceptors,
   Req,
-  UseGuards,
   Query,
   NotFoundException,
   Res,
@@ -25,7 +24,6 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth, ApiTags, ApiConsumes } from '@nestjs/swagger';
 
 @ApiTags('Blog')
-@UseGuards(AuthGuard)
 @ApiBearerAuth()
 @Controller('api/blog')
 export class BlogController {
@@ -52,7 +50,6 @@ export class BlogController {
   }
 
   @Post()
-  @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   @ApiConsumes('multipart/form-data')
   async createBlog(

@@ -14,8 +14,13 @@ export class BlogService {
   ) {}
 
   async filter(startDate: string, endDate: string): Promise<BlogPost[]> {
+    console.log('original', startDate, endDate);
+
     const start = new Date(startDate);
     const end = new Date(endDate);
+
+    console.log('converted', start, end);
+
     if (start > end) {
       throw new Error('End date must be after start date');
     }

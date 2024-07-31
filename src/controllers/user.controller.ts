@@ -6,6 +6,7 @@ import { GenerateToken } from 'src/utils/jwt.helper';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 import { ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/common/isPublic.decorator';
 
 @ApiTags('User')
 @Controller('auth/user')
@@ -15,6 +16,7 @@ export class UserController {
     private readonly generateToken: GenerateToken,
   ) {}
 
+  @Public()
   @UseGuards(AuthGuard)
   @Get()
   async getAllUsers(@Req() request: Request) {

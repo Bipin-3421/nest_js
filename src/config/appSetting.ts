@@ -5,3 +5,4 @@ export const appSetting = {
   password: process.env.PASSWORD,
   jwt_secret: process.env.JWT_SECRET,
 };
+console.log(appSetting.port);

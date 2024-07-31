@@ -5,6 +5,8 @@ import { appSetting } from './config/appSetting';
 import { BlogPost } from './entities/blog/blog-post.entity';
 import { UserModule } from './modules/user/user.module';
 import { User } from './entities/user/user.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
@@ -20,6 +22,12 @@ import { User } from './entities/user/user.entity';
     }),
     BlogModule,
     UserModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 })
 export class AppModule {}
